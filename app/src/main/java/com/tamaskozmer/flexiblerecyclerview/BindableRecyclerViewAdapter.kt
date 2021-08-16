@@ -10,19 +10,21 @@ import androidx.recyclerview.widget.RecyclerView
 class BindableRecyclerViewAdapter : RecyclerView.Adapter<BindableViewHolder>() {
 
     var itemViewModels: List<ItemViewModel> = emptyList()
-    private val viewTypeLayoutMap: MutableMap<Int, Int> = mutableMapOf()
+    private val viewTypeToLayoutId: MutableMap<Int, Int> = mutableMapOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BindableViewHolder {
         val binding: ViewDataBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(parent.context), viewTypeLayoutMap[viewType]
-            ?: 0, parent, false)
+            LayoutInflater.from(parent.context),
+            viewTypeToLayoutId[viewType] ?: 0,
+            parent,
+            false)
         return BindableViewHolder(binding)
     }
 
     override fun getItemViewType(position: Int): Int {
         val item = itemViewModels[position]
-        if (!viewTypeLayoutMap.containsKey(item.viewType)) {
-            viewTypeLayoutMap[item.viewType] = item.layoutId
+        if (!viewTypeToLayoutId.containsKey(item.viewType)) {
+            viewTypeToLayoutId[item.viewType] = item.layoutId
         }
         return item.viewType
     }
