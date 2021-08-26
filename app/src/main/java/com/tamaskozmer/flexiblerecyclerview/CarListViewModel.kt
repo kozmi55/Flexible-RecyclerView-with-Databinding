@@ -20,6 +20,10 @@ class CarListViewModel @Inject constructor(
         get() = _data
     private val _data = MutableLiveData<List<ItemViewModel>>(emptyList())
 
+    val events: LiveData<Event<CarListEvent>>
+        get() = _events
+    private val _events = MutableLiveData<Event<CarListEvent>>()
+
     init {
         loadData()
     }
@@ -44,13 +48,17 @@ class CarListViewModel @Inject constructor(
                 val item = if (car.isAd) {
                     CarAdViewModel(car.make, car.model, car.price)
                 } else {
-                    CarListingViewModel(car.make, car.model, car.price)
+                    CarListingViewModel(car.make, car.model, car.price, ::onCarListingClicked)
                 }
                 viewData.add(item)
             }
         }
 
         return viewData
+    }
+
+    private fun onCarListingClicked(carDetails: String) {
+        _events.postValue(Event(CarListEvent.ShowSelectedCar(carDetails)))
     }
 
     companion object {
