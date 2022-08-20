@@ -46,15 +46,28 @@ class CarListViewModel @Inject constructor(
             val cars = carsByMake[it]
             cars?.forEach { car: CarData ->
                 val item = if (car.isAd) {
-                    CarAdViewModel(car.make, car.model, car.price)
+                    CarAdViewModel(car.id, car.make, car.model, car.price)
                 } else {
-                    CarListingViewModel(car.make, car.model, car.price, ::onCarListingClicked)
+                    CarListingViewModel(car.id, car.make, car.model, car.price, ::onCarListingClicked) { carListingLongClicked(car.id) }
                 }
                 viewData.add(item)
             }
         }
 
         return viewData
+    }
+
+    private fun carListingLongClicked(id: Long) {
+        removeCarListing(id)
+    }
+
+    private fun removeCarListing(id: Long) {
+        val items = _data.value ?: emptyList()
+        val itemToRemove = items.firstOrNull { (it as? CarListingViewModel)?.id == id }
+        if (itemToRemove != null) {
+            val newItems = items.minus(itemToRemove)
+            _data.value = newItems
+        }
     }
 
     private fun onCarListingClicked(carDetails: String) {

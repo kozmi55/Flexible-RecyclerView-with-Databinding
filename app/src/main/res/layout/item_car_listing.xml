@@ -15,7 +15,8 @@
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:background="?selectableItemBackground"
-        android:onClick="@{() -> itemViewModel.onClick()}">
+        android:onClick="@{() -> itemViewModel.onClick()}"
+        android:onLongClick="@{(view) -> itemViewModel.onLongClick(view)}">
 
         <TextView
             android:id="@+id/carMake"

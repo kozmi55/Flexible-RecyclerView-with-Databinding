@@ -10,6 +10,7 @@ import com.tamaskozmer.flexiblerecyclerview.R
 import java.util.*
 
 class CarAdViewModel(
+    val id: Long,
     val make: String,
     val model: String,
     val price: String,
@@ -28,5 +29,15 @@ class CarAdViewModel(
     private fun getRandomColor(): Int {
         val rnd = Random()
         return Color.rgb(rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256))
+    }
+
+    override fun areItemsTheSame(other: ItemViewModel) = this === other
+
+    override fun areContentsTheSame(other: ItemViewModel): Boolean {
+        return if (other is CarListingViewModel) {
+            other.id == id
+        } else {
+            false
+        }
     }
 }
